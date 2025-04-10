@@ -3,6 +3,7 @@ import { Dashboard } from "./pages/Dashboard";
 import { Route, Routes } from "react-router";
 import { useAuth } from "./store/useAuth";
 import { Navigate } from "react-router";
+import { RecoveryPassword } from "./pages/RecoveryPassword";
 
 export const App = () => {
 
@@ -17,6 +18,8 @@ export const App = () => {
       />
       {/* Login */}
       <Route path="/login" element={<Login />} />
+
+      <Route path="/recovery-password" element={<RecoveryPassword />} />
 
       {/* Dashboard */}
       <Route path="/dashboard" element={<Dashboard />}>
