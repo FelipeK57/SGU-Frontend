@@ -1,12 +1,13 @@
-import { addToast, Button, Form, Image, Input } from "@heroui/react";
+import { addToast, Button, Form, Input } from "@heroui/react";
 import { Link } from "react-router";
-import { useWindowWidth } from "../hooks/useWidth";
 import { useState } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { setCookie } from "typescript-cookie";
+import { useAuth } from "../store/useAuth";
+import { useNavigate } from "react-router";
 
-interface PayloadJWT {
+export interface PayloadJWT {
   id: string;
   email: string;
   role: string;
@@ -15,10 +16,17 @@ interface PayloadJWT {
 export const Login = () => {
   // State where we will store the errors of the form
   const [errors, setErrors] = useState({});
-  const width = useWindowWidth();
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const [passwordVisible, setPasswordVisible] = useState(false);
+
+  const { login } = useAuth();
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setErrors({});
+    setIsLoading(true);
     let data = Object.fromEntries(new FormData(e.currentTarget));
     if (!data.email && !data.password) {
       setErrors({ email: "Campo requerido", password: "Campo requerido" });
@@ -47,12 +55,13 @@ export const Login = () => {
       const token = response.data.token;
       setCookie("token", token, { expires: 7 });
       const payload = jwtDecode<PayloadJWT>(token);
-      console.log(payload);
-
+      login(token, { email: payload.email, role: payload.role });
+      navigate("/dashboard/users");
       addToast({
         title: "Inicio de sesión exitoso",
         description: "Bienvenido a SEMCON",
         hideIcon: true,
+        timeout: 3000,
       });
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -63,33 +72,35 @@ export const Login = () => {
               description: error.response.data.message,
               hideIcon: true,
               color: "danger",
+              timeout: 3000,
             });
           }
         }
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <main className="flex flex-col gap-5 items-center justify-center min-h-screen">
       <h1 className="font-semibold text-xl">Inicio de sesión</h1>
-      <Image
+      <img
         alt="Logo de SEMCON"
-        width={width >= 768 ? 400 : 350}
-        height={150}
+        className="w-80 md:w-96"
         src="Logo_Semcon_2021.png"
       />
       <Form
         onSubmit={(e) => onSubmit(e)}
         validationErrors={errors}
-        className="max-w-[350px] md:max-w-[400px] w-full flex flex-col gap-5"
+        className="max-w-80 md:max-w-96 w-full flex flex-col gap-5"
       >
         <Input
           name="email"
           isRequired
           label="Correo Electrónico"
           labelPlacement="outside"
-          placeholder="Ej: nombre@mail.com"
+          placeholder="Ingresa tu correo electrónico"
           type="email"
           validate={(value) => {
             if (!value) return "Campo requerido";
@@ -101,13 +112,22 @@ export const Login = () => {
           isRequired
           label="Contraseña"
           labelPlacement="outside"
-          type="password"
-          placeholder="********"
+          type={passwordVisible ? "text" : "password"}
+          placeholder="Ingresa tu contraseña"
           validate={(value) => {
             if (!value) return "Campo requerido";
           }}
+          endContent={
+            <div className="bg-transparent select-none text-zinc-500 hover:text-zinc-700 transition-colors cursor-pointer text-sm" onClick={() => setPasswordVisible(!passwordVisible)}>
+              {passwordVisible ?
+                "Ocultar"
+                : "Mostrar"}
+            </div>
+          }
         />
         <Button
+          isLoading={isLoading}
+          disabled={isLoading}
           type="submit"
           className="w-full bg-primary text-white font-semibold"
         >
