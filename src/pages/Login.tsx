@@ -84,10 +84,13 @@ export const Login = () => {
 
   return (
     <main className="flex flex-col gap-5 items-center justify-center min-h-screen">
-      <h1 className="font-semibold text-xl">Inicio de sesión</h1>
+      <div className="w-full text-center">
+        <h1 className="font-semibold text-xl">Inicio de sesión</h1>
+        <h3 className="text-sm font-light">Sistema de gestión de usuarios</h3>
+      </div>
       <img
         alt="Logo de SEMCON"
-        className="w-80 md:w-96"
+        className="h-fit w-80 md:w-96"
         src="Logo_Semcon_2021.png"
       />
       <Form
@@ -96,6 +99,7 @@ export const Login = () => {
         className="max-w-80 md:max-w-96 w-full flex flex-col gap-5"
       >
         <Input
+          variant="bordered"
           name="email"
           isRequired
           label="Correo Electrónico"
@@ -108,6 +112,7 @@ export const Login = () => {
           }}
         />
         <Input
+          variant="bordered"
           name="password"
           isRequired
           label="Contraseña"

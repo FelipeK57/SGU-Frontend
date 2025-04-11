@@ -37,13 +37,13 @@ export const Navbar = () => {
     }
 
     return (
-        <header className="hidden md:flex flex-row justify-between items-center h-20 px-10 border-b border-zinc-200 shadow-sm">
-            <img className="w-52 h-4/5" src="/Logo_Semcon_2021.png" alt="Logo SEMCON" />
+        <header className="hidden xl:flex flex-row justify-between items-center h-16 px-10 border-b border-zinc-200">
+            <img className="w-fit h-4/5" src="/Logo_Semcon_2021.png" alt="Logo SEMCON" />
             <nav className="flex flex-row items-center h-full">
                 {
                     routes.map((route) => {
                         return (
-                            <Link key={route.path} className={`flex items-center justify-center hover:text-primary transition-all w-44 h-full ${isActive(route.path)}`} to={route.path}>
+                            <Link key={route.path} className={`flex items-center justify-center w-44 h-full hover:text-primary hover:bg-primary hover:bg-opacity-5 transition-all ${isActive(route.path)}`} to={route.path}>
                                 {route.name}
                             </Link>
                         )
