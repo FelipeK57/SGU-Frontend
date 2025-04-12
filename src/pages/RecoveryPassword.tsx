@@ -8,11 +8,8 @@ export const RecoveryPassword = () => {
 
     const [isLoading, setIsLoading] = useState(false)
 
-    const [errors, setErrors] = useState({})
-
     const sendCode = async () => {
         try {
-            setErrors({})
             setIsLoading(true)
             console.log(email)
         } catch (error) {
