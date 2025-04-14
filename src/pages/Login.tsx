@@ -14,8 +14,6 @@ export interface PayloadJWT {
 }
 
 export const Login = () => {
-  // State where we will store the errors of the form
-  const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -25,25 +23,8 @@ export const Login = () => {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setErrors({});
     setIsLoading(true);
     let data = Object.fromEntries(new FormData(e.currentTarget));
-    if (!data.email && !data.password) {
-      setErrors({ email: "Campo requerido", password: "Campo requerido" });
-      return;
-    }
-    if (!data.email) {
-      setErrors({ email: "Campo requerido" });
-      return;
-    }
-    if (!data.password) {
-      setErrors({ password: "Campo requerido" });
-      return;
-    }
-    if (!(data.email as string).includes("@")) {
-      setErrors({ email: "Formato de correo inválido" });
-      return;
-    }
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/auth/login`,
@@ -86,7 +67,7 @@ export const Login = () => {
     <main className="flex flex-col gap-5 items-center justify-center min-h-screen">
       <div className="w-full text-center">
         <h1 className="font-semibold text-xl">Inicio de sesión</h1>
-        <h3 className="text-sm font-light">Sistema de gestión de usuarios</h3>
+        <h3 className="text-sm font-normal">Sistema de gestión de usuarios</h3>
       </div>
       <img
         alt="Logo de SEMCON"
@@ -95,20 +76,20 @@ export const Login = () => {
       />
       <Form
         onSubmit={(e) => onSubmit(e)}
-        validationErrors={errors}
         className="max-w-80 md:max-w-96 w-full flex flex-col gap-5"
       >
         <Input
           variant="bordered"
           name="email"
+          autoComplete="email"
           isRequired
           label="Correo Electrónico"
           labelPlacement="outside"
           placeholder="Ingresa tu correo electrónico"
           type="email"
           validate={(value) => {
-            if (!value) return "Campo requerido";
-            if (!value.includes("@")) return "Formato de correo inválido";
+            if (!value) return "El campo no puede estar en blanco";
+            if (!value.includes("@")) return "Ingresa un correo electrónico válido, como ejemplo@correo.com.";
           }}
         />
         <Input
@@ -120,7 +101,7 @@ export const Login = () => {
           type={passwordVisible ? "text" : "password"}
           placeholder="Ingresa tu contraseña"
           validate={(value) => {
-            if (!value) return "Campo requerido";
+            if (!value) return "El campo no puede estar en blanco";;
           }}
           endContent={
             <div className="bg-transparent select-none text-zinc-500 hover:text-zinc-700 transition-colors cursor-pointer text-sm" onClick={() => setPasswordVisible(!passwordVisible)}>
@@ -140,7 +121,7 @@ export const Login = () => {
         </Button>
         <Link
           to={"/recovery-password"}
-          className="text-sm font-light underline w-full text-center"
+          className="text-sm font-normal underline w-full text-center"
         >
           ¿Olvidaste tu contraseña?
         </Link>
