@@ -4,6 +4,8 @@ import { Route, Routes } from "react-router";
 import { useAuth } from "./store/useAuth";
 import { Navigate } from "react-router";
 import { RecoveryPassword } from "./pages/RecoveryPassword";
+import { VerifyCode } from "./pages/VerifyCode";
+import { ChangePassword } from "./pages/ChangePassword";
 
 export const App = () => {
 
@@ -13,13 +15,15 @@ export const App = () => {
     <Routes>
       {/* Root */}
       <Route path="/" element={
-        isLoggedIn ? <Navigate to="/login" replace /> : <Navigate to="/dashboard" replace />
+        isLoggedIn ? <Navigate to="/login" replace /> : <Navigate to="/dashboard/users" replace />
       }
       />
       {/* Login */}
       <Route path="/login" element={<Login />} />
 
       <Route path="/recovery-password" element={<RecoveryPassword />} />
+      <Route path="/recovery-password/verify-code" element={<VerifyCode />} />
+      <Route path="/recovery-password/new-password" element={<ChangePassword />} />
 
       {/* Dashboard */}
       <Route path="/dashboard" element={<Dashboard />}>
