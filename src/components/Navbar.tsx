@@ -14,7 +14,7 @@ export const Navbar = () => {
             name: "Sistemas externos",
         },
         {
-            path: "settings",
+            path: "settings/my-account",
             name: "Ajustes",
         }
     ]
@@ -43,7 +43,7 @@ export const Navbar = () => {
                 {
                     routes.map((route) => {
                         return (
-                            <Link key={route.path} className={`flex items-center justify-center w-44 h-full hover:text-primary hover:bg-primary hover:bg-opacity-5 transition-all ${isActive(route.path)}`} to={route.path}>
+                            <Link key={route.path} className={`flex items-center justify-center w-44 h-full hover:text-primary hover:bg-primary hover:bg-opacity-5 transition-none ${isActive(route.path)}`} to={route.path}>
                                 {route.name}
                             </Link>
                         )

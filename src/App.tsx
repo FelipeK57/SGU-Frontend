@@ -6,6 +6,9 @@ import { Navigate } from "react-router";
 import { RecoveryPassword } from "./pages/RecoveryPassword";
 import { VerifyCode } from "./pages/VerifyCode";
 import { ChangePassword } from "./pages/ChangePassword";
+import { Settings } from "./pages/Settings";
+import { MyAccount } from "./pages/MyAccount";
+import { WorkAreas } from "./pages/WorkAreas";
 
 export const App = () => {
 
@@ -27,9 +30,14 @@ export const App = () => {
 
       {/* Dashboard */}
       <Route path="/dashboard" element={<Dashboard />}>
-        <Route path="users" element={<main className="h-screen"><img src="https://png.pngtree.com/thumb_back/fh260/background/20230521/pngtree-sunflower-full-screen-backdrop-widescreen-photos-image_2684387.jpg"></img></main>} />
+        <Route path="users" element={<h1>Users</h1>} />
         <Route path="external-systems" element={<h1>External Systems</h1>} />
-        <Route path="settings" element={<h1>Settings</h1>} />
+        <Route path="settings" element={<Settings />}>
+          <Route path="my-account" element={<MyAccount />} />
+          <Route path="work-areas" element={<WorkAreas />} />
+          <Route path="change-admin" element={<h1>change admin</h1>} />
+          <Route path="password" element={<h1>password</h1>} />
+        </Route>
       </Route>
     </Routes>
   )
