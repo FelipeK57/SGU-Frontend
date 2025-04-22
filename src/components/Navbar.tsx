@@ -14,7 +14,7 @@ export const Navbar = () => {
             name: "Sistemas externos",
         },
         {
-            path: "settings",
+            path: "settings/my-account",
             name: "Ajustes",
         }
     ]
@@ -24,7 +24,7 @@ export const Navbar = () => {
 
     const isActive = (route: string) => {
         const location = useLocation();
-        if (location.pathname.includes(route)) {
+        if (location.pathname.includes(route.slice(0, 6))) {
             return "border-b-3 border-primary text-primary transition-all";
         } else {
             return "text-zinc-500 hover:text-primary transition-all";
@@ -43,7 +43,7 @@ export const Navbar = () => {
                 {
                     routes.map((route) => {
                         return (
-                            <Link key={route.path} className={`flex items-center justify-center w-44 h-full hover:text-primary hover:bg-primary hover:bg-opacity-5 transition-all ${isActive(route.path)}`} to={route.path}>
+                            <Link key={route.path} className={`flex items-center justify-center w-44 h-full hover:text-primary hover:bg-primary hover:bg-opacity-5 transition-none ${isActive(route.path)}`} to={route.path}>
                                 {route.name}
                             </Link>
                         )
