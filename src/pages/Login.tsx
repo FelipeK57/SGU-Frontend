@@ -41,7 +41,6 @@ export const Login = () => {
       addToast({
         title: "Inicio de sesión exitoso",
         description: "Bienvenido a SEMCON",
-        hideIcon: true,
         timeout: 3000,
       });
     } catch (error) {
@@ -51,7 +50,6 @@ export const Login = () => {
             addToast({
               title: "Error",
               description: error.response.data.message,
-              hideIcon: true,
               color: "danger",
               timeout: 3000,
             });
@@ -101,7 +99,7 @@ export const Login = () => {
           type={passwordVisible ? "text" : "password"}
           placeholder="Ingresa tu contraseña"
           validate={(value) => {
-            if (!value) return "El campo no puede estar en blanco";;
+            if (!value) return "El campo no puede estar en blanco";
           }}
           endContent={
             <div className="bg-transparent select-none text-zinc-500 hover:text-zinc-700 transition-colors cursor-pointer text-sm" onClick={() => setPasswordVisible(!passwordVisible)}>

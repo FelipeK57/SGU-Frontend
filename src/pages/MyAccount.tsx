@@ -62,7 +62,7 @@ export const MyAccount = () => {
         }
         setTimeout(() => {
             getAccountInfo()
-        }, 300)
+        }, 500)
     }, [user?.email, token, reload])
 
     useEffect(() => {
@@ -116,10 +116,10 @@ export const MyAccount = () => {
         }
     }
 
-    if (!userData) return <div className="flex items-center justify-center w-full"><Spinner /></div>
+    if (!userData) return <div className="flex items-center justify-center w-full"><Spinner variant="dots" /></div>
 
     return (
-        <article className="flex flex-col gap-3 w-full md:w-1/2">
+        <article className="flex flex-col gap-3 w-full xl:w-1/2">
             <h1 className="text-lg font-semibold">
                 Información personal
             </h1>
