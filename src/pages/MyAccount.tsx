@@ -2,6 +2,7 @@ import { addToast, Button, Form, Input, Select, SelectItem, Spinner } from "@her
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useAuth } from "../store/useAuth";
+import { useFetchWorkAreas } from "../store/useWorkArea";
 
 interface UserDataResponse {
     id: number,
@@ -16,6 +17,7 @@ interface UserDataResponse {
 export const MyAccount = () => {
 
     const { user, token } = useAuth();
+    const { workAreas } = useFetchWorkAreas();
 
     const [userData, setUserData] = useState<UserDataResponse | null>(null);
     const [name, setName] = useState("");
@@ -35,7 +37,7 @@ export const MyAccount = () => {
         { key: "pa", label: "Pasaporte" },
         { key: "nit", label: "NIT" },
         { key: "rc", label: "Registro civil" },
-        { key: "nuip", label: "NUIP (Número Único de Identificación Personal)" },
+        { key: "nuip", label: "NUIP" },
         { key: "other", label: "Otro" }
     ];
 
@@ -134,8 +136,11 @@ export const MyAccount = () => {
                 </Select>
                 <Input value={documentNumber} onValueChange={setDocumentNumber} label="Número de documento" labelPlacement="outside" placeholder="Ingresa tu número de documento" variant="bordered" />
                 <Select selectedKeys={[workArea]} onSelectionChange={(keys) => setWorkArea(Array.from(keys)[0] as string)} variant="bordered" label="Área" placeholder="Seleccione un área de trabajo" labelPlacement="outside">
-                    <SelectItem key={"Administrativa"}>Administrativa</SelectItem>
-                    <SelectItem key={"Proyectos"}>Proyectos</SelectItem>
+                    {
+                        workAreas.map((workArea) => {
+                            return <SelectItem key={workArea.name}>{workArea.name}</SelectItem>
+                        })
+                    }
                 </Select>
                 <Button isLoading={isLoading} onPress={saveChanges} isDisabled={!isModified} color="primary" className="font-semibold w-full">
                     Guardar cambios

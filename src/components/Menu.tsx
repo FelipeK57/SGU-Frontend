@@ -39,8 +39,9 @@ export const Menu = () => {
     ]
 
     const isActive = (route: string) => {
+        
         const location = useLocation();
-        if (location.pathname.includes(route)) {
+        if (location.pathname.includes(route.slice(0, 6))) {
             return "bg-primary bg-opacity-5 text-primary";
         } else {
             return "text-zinc-500 hover:text-primary";
