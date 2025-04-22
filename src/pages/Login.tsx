@@ -41,7 +41,6 @@ export const Login = () => {
       addToast({
         title: "Inicio de sesión exitoso",
         description: "Bienvenido a SEMCON",
-        hideIcon: true,
         timeout: 3000,
       });
     } catch (error) {
@@ -51,7 +50,6 @@ export const Login = () => {
             addToast({
               title: "Error",
               description: error.response.data.message,
-              hideIcon: true,
               color: "danger",
               timeout: 3000,
             });

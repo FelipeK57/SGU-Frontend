@@ -1,14 +1,23 @@
 import { addToast, Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Form, Input } from "@heroui/react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useFetchWorkAreas } from "../store/useWorkArea";
 import axios from "axios";
+import { ConfirmDialog } from "../components/ConfirmDialog";
+import { ConfirmDialogMobile } from "../components/ConfirmDialogMobile";
 
 export const WorkAreas = () => {
     const [showNewWorkAreaForm, setShowNewWorkAreaForm] = useState(false);
 
+    const [mobileConfirmDialog, setMobileConfirmDialog] = useState(false);
+
+    const openMobileConfirmDialog = () => setMobileConfirmDialog(true);
+    const closeMobileConfirmDialog = () => { setMobileConfirmDialog(false); setWorkAreaId(null) }
+
     const [name, setName] = useState("")
     const [workAreaId, setWorkAreaId] = useState<number | null>(null)
     const [editMode, setEditMode] = useState(false)
+    const [disableButton, setDisableButton] = useState(false)
+    const [originalWorkAreaName, setOriginalWorkAreaName] = useState("")
 
     const { workAreas, fetchWorkAreas } = useFetchWorkAreas()
 
@@ -25,7 +34,6 @@ export const WorkAreas = () => {
                     color: "success",
                     timeout: 5000
                 })
-
             }
         } catch (error) {
             console.error(error)
@@ -46,6 +54,7 @@ export const WorkAreas = () => {
                 })
                 if (response.status === 201) {
                     fetchWorkAreas();
+                    setName("")
                     addToast({
                         title: "Área creada",
                         description: "Ha sido creada exitosamente la nueva área de trabajo",
@@ -63,6 +72,60 @@ export const WorkAreas = () => {
         }
     }
 
+    const deleteWorkArea = async (id: number | null) => {
+        try {
+            const response = await axios.delete(`${import.meta.env.VITE_API_URL}/api/work-areas/${id}`)
+            console.log(response.data)
+            if (response.status === 200) {
+                fetchWorkAreas();
+                addToast({
+                    title: "Área eliminada",
+                    description: response.data.message,
+                    color: "success",
+                    timeout: 5000
+                })
+            }
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                if (error.response) {
+                    if (error.response.status === 409) {
+                        addToast({
+                            title: "Error al eliminar área",
+                            description: error.response.data.message,
+                            color: "danger",
+                            timeout: 5000,
+                        });
+                    }
+                }
+            }
+        }
+    }
+
+    const handleConfirmDialogMobile = () => {
+        deleteWorkArea(workAreaId)
+        setWorkAreaId(null)
+    }
+
+    const handleCloseMode = () => {
+        showNewWorkAreaForm && setShowNewWorkAreaForm(false);
+        if (editMode) {
+            setEditMode(false);
+            setWorkAreaId(null)
+            setDisableButton(false)
+        }
+        setName("")
+    }
+
+    useEffect(() => {
+        if (editMode) {
+            if (originalWorkAreaName !== name) {
+                setDisableButton(false)
+            } else {
+                setDisableButton(true)
+            }
+        }
+    }, [name])
+
     return (
         <main className="flex flex-col gap-3 w-full">
             <div className="flex items-center justify-between">
@@ -73,10 +136,7 @@ export const WorkAreas = () => {
                     (showNewWorkAreaForm || editMode) && (
                         <Button
                             onPress={() => {
-                                showNewWorkAreaForm && setShowNewWorkAreaForm(false);
-                                editMode && setEditMode(false);
-                                setName("")
-                                setWorkAreaId(null)
+                                handleCloseMode()
                             }}
                             color="danger"
                             variant="light"
@@ -96,14 +156,13 @@ export const WorkAreas = () => {
 
                         )
                     }
-                    <Button type="submit" color="primary" className="w-full font-semibold">
+                    <Button isDisabled={disableButton} type="submit" color="primary" className="w-full font-semibold">
                         {
                             editMode ? "Confirmar cambio" : "Crear nueva área"
                         }
                     </Button>
                 </Form>
                 <div className="flex flex-col w-full gap-0">
-
                     {
                         workAreas.map((workArea) => {
                             return (<div key={workArea.name} className={`${workAreas.indexOf(workArea) === 0 && "border-t-1"} flex justify-between items-center w-full border-b-1 border-zinc-200 h-14  px-3`}>
@@ -122,30 +181,36 @@ export const WorkAreas = () => {
                                                 setEditMode(true)
                                                 setName(workArea.name)
                                                 setWorkAreaId(workArea.id)
+                                                setOriginalWorkAreaName(workArea.name)
                                             }} key="new">Editar</DropdownItem>
-                                            <DropdownItem key="delete" className="text-danger" color="danger">
+                                            <DropdownItem onPress={() => {
+                                                openMobileConfirmDialog()
+                                                setWorkAreaId(workArea.id)
+                                            }} key="delete" color="danger" className="text-danger">
                                                 Eliminar
                                             </DropdownItem>
                                         </DropdownMenu>
                                     </Dropdown>
+
                                 </div>
                                 <div className="hidden md:flex md:gap-3">
                                     <Button onPress={() => {
                                         setEditMode(true)
+                                        setName(workArea.name)
                                         setWorkAreaId(workArea.id)
+                                        setOriginalWorkAreaName(workArea.name)
                                     }} className="bg-opacity-20">
                                         Editar
                                     </Button>
-                                    <Button color="danger" variant="light">
-                                        Eliminar
-                                    </Button>
+                                    <ConfirmDialog onConfirm={() => deleteWorkArea(workArea.id)} />
                                 </div>
                             </div>)
                         })
                     }
                 </div>
+                <ConfirmDialogMobile isOpen={mobileConfirmDialog} onClose={closeMobileConfirmDialog} onConfirm={() => { handleConfirmDialogMobile() }} />
             </section>
-        </main>
+        </main >
     )
 }
 
