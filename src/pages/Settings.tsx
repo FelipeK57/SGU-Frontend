@@ -38,10 +38,10 @@ export const Settings = () => {
     return (
         <main className="flex flex-col gap-3 w-full max-w-[1040px] mx-auto">
             <nav className="flex flex-row justify-between h-6 items-center">
-                <h2 className={`${location.length > 19 ? "text-sm font-light md:text-lg md:font-semibold" : "text-lg font-semibold"}`}>Ajustes</h2>
+                <h2 className={`${location.length > 19 ? "font-light md:text-lg md:font-semibold" : "text-lg font-semibold"}`}>Ajustes</h2>
                 {
                     !showLinks &&
-                    <Button size="sm" className="block sm:hidden" color="primary" variant="light" onPress={() => {
+                    <Button className="block sm:hidden" color="primary" variant="light" onPress={() => {
                         navigate("/dashboard/settings");
                         setShowLinks(true)
                     }}>Volver</Button>

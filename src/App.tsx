@@ -5,10 +5,12 @@ import { useAuth } from "./store/useAuth";
 import { Navigate } from "react-router";
 import { RecoveryPassword } from "./pages/RecoveryPassword";
 import { VerifyCode } from "./pages/VerifyCode";
-import { ChangePassword } from "./pages/ChangePassword";
+import { NewPassword } from "./pages/NewPassword";
 import { Settings } from "./pages/Settings";
 import { MyAccount } from "./pages/MyAccount";
 import { WorkAreas } from "./pages/WorkAreas";
+import { ChangePassword } from "./pages/ChangePassword";
+import { UsersManagement } from "./pages/UsersManagement";
 
 export const App = () => {
 
@@ -26,17 +28,17 @@ export const App = () => {
 
       <Route path="/recovery-password" element={<RecoveryPassword />} />
       <Route path="/recovery-password/verify-code" element={<VerifyCode />} />
-      <Route path="/recovery-password/new-password" element={<ChangePassword />} />
+      <Route path="/recovery-password/new-password" element={<NewPassword />} />
 
       {/* Dashboard */}
       <Route path="/dashboard" element={<Dashboard />}>
-        <Route path="users" element={<h1>Users</h1>} />
+        <Route path="users" element={<UsersManagement />} />
         <Route path="external-systems" element={<h1>External Systems</h1>} />
         <Route path="settings" element={<Settings />}>
           <Route path="my-account" element={<MyAccount />} />
           <Route path="work-areas" element={<WorkAreas />} />
           <Route path="change-admin" element={<h1>change admin</h1>} />
-          <Route path="password" element={<h1>password</h1>} />
+          <Route path="password" element={<ChangePassword />} />
         </Route>
       </Route>
     </Routes>

@@ -35,6 +35,8 @@ export const WorkAreas = () => {
                     timeout: 5000
                 })
             }
+            setEditMode(false)
+            setName("")
         } catch (error) {
             console.error(error)
         }
@@ -199,7 +201,7 @@ export const WorkAreas = () => {
                                         setName(workArea.name)
                                         setWorkAreaId(workArea.id)
                                         setOriginalWorkAreaName(workArea.name)
-                                    }} className="bg-opacity-20">
+                                    }} className="bg-default bg-opacity-50">
                                         Editar
                                     </Button>
                                     <ConfirmDialog onConfirm={() => deleteWorkArea(workArea.id)} />
