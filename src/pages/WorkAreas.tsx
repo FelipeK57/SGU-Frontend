@@ -174,7 +174,7 @@ export const WorkAreas = () => {
                                 <div className="block md:hidden">
                                     <Dropdown>
                                         <DropdownTrigger>
-                                            <Button isIconOnly className="rounded-full" color="default" variant="bordered">
+                                            <Button aria-label="Opciones" isIconOnly className="rounded-full" color="primary" variant="bordered">
                                                 <ThreePoint />
                                             </Button>
                                         </DropdownTrigger>
@@ -184,11 +184,11 @@ export const WorkAreas = () => {
                                                 setName(workArea.name)
                                                 setWorkAreaId(workArea.id)
                                                 setOriginalWorkAreaName(workArea.name)
-                                            }} key="new">Editar</DropdownItem>
+                                            }} key="new" color="primary" variant="bordered" className="text-primary">Editar</DropdownItem>
                                             <DropdownItem onPress={() => {
                                                 openMobileConfirmDialog()
                                                 setWorkAreaId(workArea.id)
-                                            }} key="delete" color="danger" className="text-danger">
+                                            }} key="delete" variant="bordered" color="danger" className="text-danger">
                                                 Eliminar
                                             </DropdownItem>
                                         </DropdownMenu>
@@ -201,7 +201,7 @@ export const WorkAreas = () => {
                                         setName(workArea.name)
                                         setWorkAreaId(workArea.id)
                                         setOriginalWorkAreaName(workArea.name)
-                                    }} className="bg-default bg-opacity-50">
+                                    }} color="primary" variant="light">
                                         Editar
                                     </Button>
                                     <ConfirmDialog onConfirm={() => deleteWorkArea(workArea.id)} />

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../store/useAuth";
 import { useFetchWorkAreas } from "../store/useWorkArea";
 
-interface UserDataResponse {
+export interface UserDataResponse {
     id: number,
     name: string,
     lastName: string,
@@ -124,18 +124,30 @@ export const MyAccount = () => {
                 Información personal
             </h1>
             <Form className="flex flex-col gap-3">
-                <Input value={name} onValueChange={setName} label="Nombre" labelPlacement="outside" placeholder="Ingresa tu nombre" variant="bordered" />
-                <Input value={lastName} onValueChange={setLastName} label="Apellido" labelPlacement="outside" placeholder="Ingresa tu apellido" variant="bordered" />
-                <Input value={email} onValueChange={setEmail} label="Correo Electrónico" labelPlacement="outside" placeholder="Ingresa tu correo electrónico" variant="bordered" />
-                <Select selectedKeys={[documentType]} onSelectionChange={(keys) => setDocumentType(Array.from(keys)[0] as string)} variant="bordered" placeholder="Seleccione un tipo de documento" label="Tipo de documento" labelPlacement="outside">
+                <Input value={name} onValueChange={setName} label="Nombre" labelPlacement="outside" placeholder="Ingresa tu nombre" variant="bordered" validate={(value) => {
+                    if (!value) return "El campo no puede estar en blanco"
+                }} />
+                <Input value={lastName} onValueChange={setLastName} label="Apellido" labelPlacement="outside" placeholder="Ingresa tu apellido" variant="bordered" validate={(value) => {
+                    if (!value) return "El campo no puede estar en blanco"
+                }} />
+                <Input value={email} onValueChange={setEmail} label="Correo Electrónico" labelPlacement="outside" placeholder="Ingresa tu correo electrónico" variant="bordered" validate={(value) => {
+                    if (!value) return "El campo no puede estar en blanco"
+                }} />
+                <Select selectedKeys={[documentType]} onSelectionChange={(keys) => setDocumentType(Array.from(keys)[0] as string)} variant="bordered" placeholder="Seleccione un tipo de documento" label="Tipo de documento" labelPlacement="outside" validate={(value) => {
+                    if (!value) return "El campo no puede estar en blanco"
+                }}>
                     {
                         documentTypes.map((documentType) => {
                             return <SelectItem key={documentType.key}>{documentType.label}</SelectItem>
                         })
                     }
                 </Select>
-                <Input value={documentNumber} onValueChange={setDocumentNumber} label="Número de documento" labelPlacement="outside" placeholder="Ingresa tu número de documento" variant="bordered" />
-                <Select selectedKeys={[workArea]} onSelectionChange={(keys) => setWorkArea(Array.from(keys)[0] as string)} variant="bordered" label="Área" placeholder="Seleccione un área de trabajo" labelPlacement="outside">
+                <Input value={documentNumber} onValueChange={setDocumentNumber} label="Número de documento" labelPlacement="outside" placeholder="Ingresa tu número de documento" variant="bordered" validate={(value) => {
+                    if (!value) return "El campo no puede estar en blanco"
+                }} />
+                <Select selectedKeys={[workArea]} onSelectionChange={(keys) => setWorkArea(Array.from(keys)[0] as string)} variant="bordered" label="Área" placeholder="Seleccione un área de trabajo" labelPlacement="outside" validate={(value) => {
+                    if (!value) return "El campo no puede estar en blanco"
+                }}>
                     {
                         workAreas.map((workArea) => {
                             return <SelectItem key={workArea.name}>{workArea.name}</SelectItem>
@@ -145,7 +157,6 @@ export const MyAccount = () => {
                 <Button isLoading={isLoading} onPress={saveChanges} isDisabled={!isModified} color="primary" className="font-semibold w-full">
                     Guardar cambios
                 </Button>
-
             </Form>
         </article>
     )

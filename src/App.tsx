@@ -11,6 +11,8 @@ import { MyAccount } from "./pages/MyAccount";
 import { WorkAreas } from "./pages/WorkAreas";
 import { ChangePassword } from "./pages/ChangePassword";
 import { UsersManagement } from "./pages/UsersManagement";
+import { NewUser } from "./pages/NewUser";
+import { EditUser } from "./pages/EditUser";
 
 export const App = () => {
 
@@ -33,6 +35,8 @@ export const App = () => {
       {/* Dashboard */}
       <Route path="/dashboard" element={<Dashboard />}>
         <Route path="users" element={<UsersManagement />} />
+        <Route path="new-user" element={<NewUser />} />
+        <Route path="edit-user" element={<EditUser />} />
         <Route path="external-systems" element={<h1>External Systems</h1>} />
         <Route path="settings" element={<Settings />}>
           <Route path="my-account" element={<MyAccount />} />

@@ -1,5 +1,6 @@
 import { create } from "zustand";
-import { removeCookie } from "typescript-cookie";
+import { getCookie, removeCookie, setCookie } from "typescript-cookie";
+import { persist } from "zustand/middleware";
 
 interface AuthState {
   token: string | null;
@@ -11,19 +12,57 @@ interface AuthState {
   logout: () => void;
 }
 
-export const useAuth = create<AuthState>((set) => ({
-  token: null,
-  isLoggedIn: false,
-  user: null,
-  recoveryEmail: null,
-  setRecoveryEmail: (email) => {
-    set({ recoveryEmail: email });
+const zustandSessionStorage = {
+  getItem: (name: string) => {
+    const item = sessionStorage.getItem(name);
+    return item ? JSON.parse(item) : null;
   },
-  login: (token, user) => {
-    set({ token, user, isLoggedIn: true });
+  setItem: (name: string, value: any) => {
+    sessionStorage.setItem(name, JSON.stringify(value));
   },
-  logout: () => {
-    removeCookie("token");
-    set({ token: null, user: null, isLoggedIn: false });
+  removeItem: (name: string) => {
+    sessionStorage.removeItem(name);
   },
-}));
+};
+
+interface UserState {
+  email: string | null;
+  setEmail: (email: string) => void;
+  clear: () => void;
+}
+
+export const useUserStore = create<UserState>()(
+  persist(
+    (set) => ({
+      email: null,
+      setEmail: (email) => set({ email }),
+      clear: () => set({ email: null }),
+    }),
+    {
+      name: "user-data",
+      storage: zustandSessionStorage,
+    }
+  )
+);
+
+export const useAuth = create<AuthState>((set) => {
+  const storedToken = getCookie("token");
+
+  return {
+    token: storedToken || null,
+    isLoggedIn: storedToken ? true : false,
+    user: null,
+    recoveryEmail: null,
+    setRecoveryEmail: (email) => {
+      set({ recoveryEmail: email });
+    },
+    login: (token, user) => {
+      set({ token, user, isLoggedIn: true });
+      setCookie("token", token, { expires: 7 });
+    },
+    logout: () => {
+      removeCookie("token");
+      set({ token: null, user: null, isLoggedIn: false });
+    },
+  };
+});

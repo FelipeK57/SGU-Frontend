@@ -24,10 +24,10 @@ export const ConfirmDialogMobile = ({ onConfirm, isOpen, onClose }: ConfirmDialo
                     </p>
                 </ModalBody>
                 <ModalFooter>
-                    <Button variant="light" onPress={onClose}>
+                    <Button color="default" variant="light" onPress={onClose}>
                         Cancelar
                     </Button>
-                    <Button color="danger" onPress={() => { onConfirm(); onClose(); }}>
+                    <Button color="danger" variant="solid" onPress={() => { onConfirm(); onClose(); }}>
                         Eliminar
                     </Button>
                 </ModalFooter>
