@@ -30,6 +30,8 @@ export const MyAccount = () => {
     const [reload, setReload] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
 
+    const [errors, setErrors] = useState({})
+
     const documentTypes = [
         { key: "cc", label: "Cédula de ciudadanía" },
         { key: "ti", label: "Tarjeta de identidad" },
@@ -43,13 +45,12 @@ export const MyAccount = () => {
 
     useEffect(() => {
         const getAccountInfo = async () => {
-            if (!user) return;
+            if (!user || !token) return;
             const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/users/${user?.email}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             })
-
             const fetchedUser: UserDataResponse = response.data.user;
             setName(fetchedUser.name);
             setLastName(fetchedUser.lastName);
@@ -62,7 +63,7 @@ export const MyAccount = () => {
         }
         setTimeout(() => {
             getAccountInfo()
-        }, 500)
+        }, 300)
     }, [user?.email, token, reload])
 
     useEffect(() => {
@@ -81,10 +82,18 @@ export const MyAccount = () => {
 
     }, [name, lastName, email, documentType, documentNumber, workArea, userData]);
 
-    const saveChanges = async () => {
+    const saveChanges = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
         try {
             setIsLoading(true)
-            console.log(documentType, workArea)
+
+            const data = Object.fromEntries(new FormData(e.currentTarget))
+
+            if (!(data.email as string).includes("@")) {
+                setErrors({ email: "El correo electrónico no es válido" })
+                return;
+            }
+
             const response = await axios.put(`${import.meta.env.VITE_API_URL}/api/users/${userData?.id}`,
                 {
                     name: name,
@@ -101,18 +110,28 @@ export const MyAccount = () => {
                 })
             if (response.status === 200) {
                 setReload(!reload)
-                console.log(response.data.message)
                 addToast({
                     title: "Usuario actualizado",
                     description: response.data.message,
                     color: "success",
                     timeout: 3000
                 })
-                setIsLoading(false)
             }
         } catch (error) {
-            setIsLoading(false)
-            console.log(error)
+            if (axios.isAxiosError(error)) {
+                if (error.response?.status === 400) {
+                    addToast({
+                        title: "Error al actualizar datos",
+                        description: error.response.data.message,
+                        color: "danger",
+                        timeout: 3000
+                    })
+                }
+            }
+        } finally {
+            setTimeout(() => {
+                setIsLoading(false);
+            }, 300);
         }
     }
 
@@ -123,38 +142,26 @@ export const MyAccount = () => {
             <h1 className="text-lg font-semibold">
                 Información personal
             </h1>
-            <Form className="flex flex-col gap-3">
-                <Input value={name} onValueChange={setName} label="Nombre" labelPlacement="outside" placeholder="Ingresa tu nombre" variant="bordered" validate={(value) => {
-                    if (!value) return "El campo no puede estar en blanco"
-                }} />
-                <Input value={lastName} onValueChange={setLastName} label="Apellido" labelPlacement="outside" placeholder="Ingresa tu apellido" variant="bordered" validate={(value) => {
-                    if (!value) return "El campo no puede estar en blanco"
-                }} />
-                <Input value={email} onValueChange={setEmail} label="Correo Electrónico" labelPlacement="outside" placeholder="Ingresa tu correo electrónico" variant="bordered" validate={(value) => {
-                    if (!value) return "El campo no puede estar en blanco"
-                }} />
-                <Select selectedKeys={[documentType]} onSelectionChange={(keys) => setDocumentType(Array.from(keys)[0] as string)} variant="bordered" placeholder="Seleccione un tipo de documento" label="Tipo de documento" labelPlacement="outside" validate={(value) => {
-                    if (!value) return "El campo no puede estar en blanco"
-                }}>
+            <Form onSubmit={(e) => saveChanges(e)} validationErrors={errors} className="flex flex-col gap-3">
+                <Input isRequired name="name" value={name} onValueChange={setName} label="Nombre" labelPlacement="outside" placeholder="Ingresa tu nombre" variant="bordered" />
+                <Input isRequired name="lastName" value={lastName} onValueChange={setLastName} label="Apellido" labelPlacement="outside" placeholder="Ingresa tu apellido" variant="bordered" />
+                <Input isRequired name="email" value={email} onValueChange={setEmail} label="Correo Electrónico" labelPlacement="outside" placeholder="Ingresa tu correo electrónico" variant="bordered" />
+                <Select isRequired name="documentType" selectedKeys={[documentType]} onSelectionChange={(keys) => setDocumentType(Array.from(keys)[0] as string)} variant="bordered" placeholder="Seleccione un tipo de documento" label="Tipo de documento" labelPlacement="outside">
                     {
                         documentTypes.map((documentType) => {
                             return <SelectItem key={documentType.key}>{documentType.label}</SelectItem>
                         })
                     }
                 </Select>
-                <Input value={documentNumber} onValueChange={setDocumentNumber} label="Número de documento" labelPlacement="outside" placeholder="Ingresa tu número de documento" variant="bordered" validate={(value) => {
-                    if (!value) return "El campo no puede estar en blanco"
-                }} />
-                <Select selectedKeys={[workArea]} onSelectionChange={(keys) => setWorkArea(Array.from(keys)[0] as string)} variant="bordered" label="Área" placeholder="Seleccione un área de trabajo" labelPlacement="outside" validate={(value) => {
-                    if (!value) return "El campo no puede estar en blanco"
-                }}>
+                <Input isRequired name="documentNumber" value={documentNumber} onValueChange={setDocumentNumber} label="Número de documento" labelPlacement="outside" placeholder="Ingresa tu número de documento" variant="bordered" />
+                <Select isRequired name="workArea" selectedKeys={[workArea]} onSelectionChange={(keys) => setWorkArea(Array.from(keys)[0] as string)} variant="bordered" label="Área" placeholder="Seleccione un área de trabajo" labelPlacement="outside">
                     {
                         workAreas.map((workArea) => {
                             return <SelectItem key={workArea.name}>{workArea.name}</SelectItem>
                         })
                     }
                 </Select>
-                <Button isLoading={isLoading} onPress={saveChanges} isDisabled={!isModified} color="primary" className="font-semibold w-full">
+                <Button isLoading={isLoading} type="submit" isDisabled={!isModified} color="primary" className="font-semibold w-full">
                     Guardar cambios
                 </Button>
             </Form>

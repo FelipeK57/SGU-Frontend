@@ -166,8 +166,8 @@ export const WorkAreas = () => {
                 </Form>
                 <div className="flex flex-col w-full gap-0">
                     {
-                        workAreas.map((workArea) => {
-                            return (<div key={workArea.name} className={`${workAreas.indexOf(workArea) === 0 && "border-t-1"} flex justify-between items-center w-full border-b-1 border-zinc-200 h-14  px-3`}>
+                        workAreas.map((workArea, index) => {
+                            return (<div key={workArea.name} className={`${index === 0 && "border-t-1"} flex justify-between items-center w-full border-b-1 border-zinc-200 h-14 px-3`}>
                                 <p>
                                     {workArea.name}
                                 </p>
@@ -201,7 +201,7 @@ export const WorkAreas = () => {
                                         setName(workArea.name)
                                         setWorkAreaId(workArea.id)
                                         setOriginalWorkAreaName(workArea.name)
-                                    }} color="primary" variant="light">
+                                    }} color="primary" variant="bordered">
                                         Editar
                                     </Button>
                                     <ConfirmDialog onConfirm={() => deleteWorkArea(workArea.id)} />

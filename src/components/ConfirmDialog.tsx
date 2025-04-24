@@ -17,7 +17,7 @@ export const ConfirmDialog = ({ onConfirm }: ConfirmDialogProps) => {
 
     return (
         <>
-            <Button className="w-full" color="danger" variant="light" onPress={onOpen}>Eliminar</Button>
+            <Button className="w-full" color="danger" variant="bordered" onPress={onOpen}>Eliminar</Button>
             <Modal size="sm" className="m-2" placement="center" isOpen={isOpen} onOpenChange={onOpenChange}>
                 <ModalContent>
                     {(onClose) => (

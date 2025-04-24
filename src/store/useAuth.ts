@@ -6,9 +6,10 @@ interface AuthState {
   token: string | null;
   isLoggedIn: boolean;
   user: { email: string; role: string } | null;
+  setUser: (email: string, role: string) => void;
   recoveryEmail: string | null;
   setRecoveryEmail: (email: string) => void;
-  login: (token: string, user: any) => void;
+  login: (token: string) => void;
   logout: () => void;
 }
 
@@ -53,16 +54,19 @@ export const useAuth = create<AuthState>((set) => {
     isLoggedIn: storedToken ? true : false,
     user: null,
     recoveryEmail: null,
+    setUser(email, role) {
+      set({ user: { email: email, role: role } });
+    },
     setRecoveryEmail: (email) => {
       set({ recoveryEmail: email });
     },
-    login: (token, user) => {
-      set({ token, user, isLoggedIn: true });
-      setCookie("token", token, { expires: 7 });
+    login: (token) => {
+      set({ token, isLoggedIn: true });
+      setCookie("token", token, { expires: 7, path: "" });
     },
     logout: () => {
-      removeCookie("token");
       set({ token: null, user: null, isLoggedIn: false });
+      removeCookie("token");
     },
   };
 });

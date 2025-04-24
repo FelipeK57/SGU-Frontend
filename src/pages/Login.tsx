@@ -2,10 +2,9 @@ import { addToast, Button, Form, Input } from "@heroui/react";
 import { Link } from "react-router";
 import { useState } from "react";
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
-import { setCookie } from "typescript-cookie";
 import { useAuth } from "../store/useAuth";
 import { useNavigate } from "react-router";
+import { jwtDecode } from "jwt-decode";
 
 export interface PayloadJWT {
   id: string;
@@ -19,7 +18,7 @@ export const Login = () => {
 
   const [passwordVisible, setPasswordVisible] = useState(false);
 
-  const { login } = useAuth();
+  const { login, setUser } = useAuth();
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -34,9 +33,9 @@ export const Login = () => {
         }
       );
       const token = response.data.token;
-      setCookie("token", token, { expires: 7 });
       const payload = jwtDecode<PayloadJWT>(token);
-      login(token, { email: payload.email, role: payload.role });
+      setUser(payload.email, payload.role)
+      login(token);
       navigate("/dashboard/users");
       addToast({
         title: "Inicio de sesión exitoso",

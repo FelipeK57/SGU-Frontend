@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../store/useAuth";
 import { useNavigate } from "react-router";
+import { RowUser } from "../components/RowUser";
 
 export interface User {
     id: number;
@@ -66,7 +67,7 @@ export const UsersManagement = () => {
             const result = listToFilter.filter((user) =>
                 user.name.toLowerCase().includes(lookingFor.toLowerCase()) ||
                 user.lastName.toLowerCase().includes(lookingFor.toLowerCase()) ||
-                user.documentNumber.includes(lookingFor)
+                user.documentNumber.includes(lookingFor) || user.workArea.toLowerCase().includes(lookingFor.toLowerCase())
             );
 
             setFilteredUsers(result);
@@ -75,26 +76,25 @@ export const UsersManagement = () => {
         return () => clearTimeout(delayDebounce);
     }, [lookingFor, activeUsers, inactiveUsers, showInactives]);
 
+    const columns = [
+        {
+            "name": "Identificación"
+        },
+        {
+            "name": "Nombre"
+        },
+        {
+            "name": "Correo"
+        },
+        {
+            "name": "Área"
+        },
+        {
+            "name": "Acciones"
+        }
+    ]
 
-    // const columns = [
-    //     {
-    //         "name": "Identificación"
-    //     },
-    //     {
-    //         "name": "Nombre"
-    //     },
-    //     {
-    //         "name": "Correo"
-    //     },
-    //     {
-    //         "name": "Área"
-    //     },
-    //     {
-    //         "name": "Acciones"
-    //     }
-    // ]
-
-    return <main className="flex flex-col gap-3 w-full max-w-[1040px] mx-auto">
+    return <main className="flex flex-col gap-3 w-full xl:max-w-[1280px] 2xl:max-w-[1440px] mx-auto">
         <h1 className="text-lg font-semibold">
             Usuarios
         </h1>
@@ -118,11 +118,10 @@ export const UsersManagement = () => {
                 </Button>
             </div>
             <div className="flex gap-3">
-                <Input value={lookingFor} onChange={(e) => setLookingFor(e.target.value)} size="lg" variant="bordered" startContent={<SearchIcon />} placeholder="Buscar" />
+                <Input value={lookingFor} onChange={(e) => setLookingFor(e.target.value)} size="lg" variant="bordered" startContent={<SearchIcon />} endContent={<MinusIcon lookingFor={lookingFor} setLookingFor={setLookingFor} />} placeholder="Buscar" />
                 <Button onPress={() => navigate("/dashboard/new-user")} color="primary" className="font-semibold py-6 px-8">Crear usuario</Button>
             </div>
         </div>
-
         <section className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3 xl:hidden">
             {filteredUsers && filteredUsers.length > 0 ? (
                 filteredUsers.map((user) => (
@@ -134,12 +133,56 @@ export const UsersManagement = () => {
                 </p>
             )}
         </section>
+        <div className="hidden xl:block">
+            {filteredUsers && filteredUsers.length > 0 ? (
+                <>
+                    <div className="grid grid-cols-5 gap-3 border-y-1 px-4  border-zinc-200">
+                        {
+                            columns.map((column, index) => (
+                                <div key={index} className="flex items-center text-left font-semibold text-sm 2xl:text-base h-14">
+                                    {column.name}
+                                </div>
+                            ))
+                        }
+                    </div>
+                    {filteredUsers.map((user) => (
+                        <RowUser key={user.id} user={user} reload={reload} setReload={setReload} />
+                    ))
+                    }
+                </>
+            ) : (
+                <p className="w-full text-center text-sm font-light text-gray-500 py-4">
+                    No hay usuarios {showInactives ? "inactivos" : "activos"}
+                </p>
+            )}
+        </div>
     </main>
 }
 
 export const SearchIcon = () => {
     return <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 opacity-40">
         <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+    </svg>
+
+}
+
+interface MinusIconProps {
+    lookingFor: string
+    setLookingFor: (lookingFor: string) => void
+}
+
+export const MinusIcon = ({ lookingFor, setLookingFor }: MinusIconProps) => {
+
+    const handleClear = () => {
+        if (!lookingFor) return
+        else setLookingFor("")
+    }
+
+    if (!lookingFor) return <div className="w-6 h-6" />
+
+    return <svg onClick={() => handleClear()} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 opacity-80 rounded-full text-danger cursor-pointer
+    ">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
     </svg>
 
 }

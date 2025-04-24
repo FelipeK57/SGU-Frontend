@@ -13,6 +13,7 @@ import { ChangePassword } from "./pages/ChangePassword";
 import { UsersManagement } from "./pages/UsersManagement";
 import { NewUser } from "./pages/NewUser";
 import { EditUser } from "./pages/EditUser";
+import { ChangeAdministrator } from "./pages/ChangeAdministrator";
 
 export const App = () => {
 
@@ -41,7 +42,7 @@ export const App = () => {
         <Route path="settings" element={<Settings />}>
           <Route path="my-account" element={<MyAccount />} />
           <Route path="work-areas" element={<WorkAreas />} />
-          <Route path="change-admin" element={<h1>change admin</h1>} />
+          <Route path="change-admin" element={<ChangeAdministrator />} />
           <Route path="password" element={<ChangePassword />} />
         </Route>
       </Route>
