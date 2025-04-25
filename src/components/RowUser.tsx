@@ -43,12 +43,12 @@ export const RowUser = ({ user, reload, setReload }: RowUserProps) => {
     }
 
     return (
-        <div key={user.id} className="grid grid-cols-5 gap-3 px-4 items-center h-14 border-b-1 border-zinc-200">
-            <p className="text-sm 2xl:text-base">{user.documentNumber}</p>
-            <p className="text-sm 2xl:text-base">{user.name} {user.lastName}</p>
-            <p className="text-sm 2xl:text-base">{user.email}</p>
-            <p className="text-sm 2xl:text-base">{user.workArea}</p>
-            <div className="flex flex-row gap-5">
+        <div key={user.id} className="grid [grid-template-columns:15%_20%_25%_20%_20%] gap-2 px-4 items-center h-14 border-b-1 border-zinc-200">
+            <p className="text-sm">{user.documentNumber}</p>
+            <p className="text-sm truncate overflow-hidden text-ellipsis whitespace-nowrap">{user.name} {user.lastName}</p>
+            <p className="text-sm truncate overflow-hidden text-ellipsis whitespace-nowrap">{user.email}</p>
+            <p className="text-sm truncate overflow-hidden text-ellipsis whitespace-nowrap">{user.workArea}</p>
+            <div className="flex flex-row gap-2 w-4/5">
                 <Button onPress={() => handleEdit()} color="primary" variant="bordered" className="w-full">
                     Editar
                 </Button>

@@ -136,10 +136,10 @@ export const UsersManagement = () => {
         <div className="hidden xl:block">
             {filteredUsers && filteredUsers.length > 0 ? (
                 <>
-                    <div className="grid grid-cols-5 gap-3 border-y-1 px-4  border-zinc-200">
+                    <div className="grid [grid-template-columns:15%_20%_25%_20%_20%] gap-2 border-y-1 px-4 border-zinc-200">
                         {
                             columns.map((column, index) => (
-                                <div key={index} className="flex items-center text-left font-semibold text-sm 2xl:text-base h-14">
+                                <div key={index} className="flex items-center text-left font-semibold text-sm h-14">
                                     {column.name}
                                 </div>
                             ))

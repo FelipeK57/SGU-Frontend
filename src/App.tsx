@@ -14,6 +14,7 @@ import { UsersManagement } from "./pages/UsersManagement";
 import { NewUser } from "./pages/NewUser";
 import { EditUser } from "./pages/EditUser";
 import { ChangeAdministrator } from "./pages/ChangeAdministrator";
+import { ExternalSystemsManagement } from "./pages/ExternalSystemsManagement";
 
 export const App = () => {
 
@@ -23,7 +24,7 @@ export const App = () => {
     <Routes>
       {/* Root */}
       <Route path="/" element={
-        isLoggedIn ? <Navigate to="/login" replace /> : <Navigate to="/dashboard/users" replace />
+        isLoggedIn ? <Navigate to="/dashboard/users" replace /> : <Navigate to="/login" replace />
       }
       />
       {/* Login */}
@@ -38,7 +39,7 @@ export const App = () => {
         <Route path="users" element={<UsersManagement />} />
         <Route path="new-user" element={<NewUser />} />
         <Route path="edit-user" element={<EditUser />} />
-        <Route path="external-systems" element={<h1>External Systems</h1>} />
+        <Route path="external-systems" element={<ExternalSystemsManagement />} />
         <Route path="settings" element={<Settings />}>
           <Route path="my-account" element={<MyAccount />} />
           <Route path="work-areas" element={<WorkAreas />} />

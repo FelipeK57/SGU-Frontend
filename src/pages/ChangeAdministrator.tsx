@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react"
 import { MinusIcon, SearchIcon, User } from "./UsersManagement"
-import { Button, Input, Spinner } from "@heroui/react"
-import { useNavigate } from "react-router"
+import { Input, Spinner } from "@heroui/react"
 import { useAuth } from "../store/useAuth"
 import axios from "axios"
+import { ConfirmTransferAdmin } from "../components/ConfirmTransferAdmin"
 
 export const ChangeAdministrator = () => {
 
     const { token } = useAuth()
 
     const [lookingFor, setLookingFor] = useState("")
-    const navigate = useNavigate()
     const [activeUsers, setActiveUsers] = useState<User[] | null>(null)
     const [filteredUsers, setFilteredUsers] = useState<User[] | null>(null)
 
@@ -60,7 +59,7 @@ export const ChangeAdministrator = () => {
             <div>
                 {filteredUsers && filteredUsers.length > 0 ? (
                     <>
-                        <div className="grid grid-cols-2 gap-10 border-y-1 px-4 border-zinc-200">
+                        <div className="grid [grid-template-columns:60%_40%] gap-10 border-y-1 px-4 border-zinc-200">
                             {columns.map((column, index) => (
                                 <div key={index} className="flex items-center text-left font-semibold text-sm 2xl:text-base h-14 py-2">
                                     {column.name}
@@ -69,11 +68,9 @@ export const ChangeAdministrator = () => {
                         </div>
 
                         {filteredUsers.map((user) => (
-                            <div key={user.id} className="grid grid-cols-2 gap-10 px-4 items-center h-20 md:h-14 py-2 border-b-1 border-zinc-200">
+                            <div key={user.id} className="grid [grid-template-columns:60%_40%] gap-10 px-4 items-center h-20 md:h-14 py-2 border-b-1 border-zinc-200">
                                 <p className="text-sm 2xl:text-base">{user.name} {user.lastName}</p>
-                                <Button onPress={() => navigate("/login")} color="primary" variant="bordered" className="w-1/3">
-                                    Elegir
-                                </Button>
+                                <ConfirmTransferAdmin id={user.id} />
                             </div>
                         ))}
                     </>
