@@ -8,11 +8,11 @@ import {
     useDisclosure,
 } from "@heroui/react";
 
-interface ConfirmDialogProps {
+interface ConfirmDialogExternalSystemsProps {
     onConfirm: () => void;
 }
 
-export const ConfirmDialog = ({ onConfirm }: ConfirmDialogProps) => {
+export const ConfirmDialogExternalSystems = ({ onConfirm }: ConfirmDialogExternalSystemsProps) => {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
     return (
@@ -25,7 +25,7 @@ export const ConfirmDialog = ({ onConfirm }: ConfirmDialogProps) => {
                             <ModalHeader className="flex flex-col gap-1">Confirmar eliminación</ModalHeader>
                             <ModalBody>
                                 <p className="text-sm">
-                                    ¿Estás seguro de que deseas eliminar permanentemente esta área? Esta acción no se puede deshacer.
+                                    ¿Estás seguro de que deseas eliminar permanentemente este sistema externo? Esta acción no se puede deshacer.
                                 </p>
                             </ModalBody>
                             <ModalFooter>

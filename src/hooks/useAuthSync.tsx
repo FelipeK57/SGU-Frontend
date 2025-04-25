@@ -1,29 +1,42 @@
-import { useEffect } from "react";
-import { getCookie } from "typescript-cookie";
+import { useEffect, useState } from "react";
 import { useAuth } from "../store/useAuth";
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 import { jwtDecode } from "jwt-decode";
 import { PayloadJWT } from "../pages/Login";
 
 export const useAuthSync = () => {
-    const { login } = useAuth();
+    const { token, setUser, logout } = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const token = getCookie("token");
+        const syncAuth = async () => {
+            if (location.pathname === "/login") return;
 
-        if (token) {
+            if (!token) {
+                logout();
+                navigate("/login", { replace: true });
+                return;
+            }
+
             try {
                 const payload = jwtDecode<PayloadJWT>(token);
-                login(token, { email: payload.email, role: payload.role });
-                // No redirige si está todo bien
-            } catch (e) {
-                // Token inválido o corrupto
-                navigate("/login");
+                setUser(payload.email, payload.role);
+            } catch (error) {
+                logout();
+                navigate("/login", { replace: true });
+            } finally {
+                setLoading(false);
             }
-        } else {
-            // No hay token
-            navigate("/login");
-        }
-    }, []);
+        };
+
+        syncAuth();
+    }, [token, navigate, location.pathname, logout, setUser]);
+
+    if (loading) {
+        return null;
+    }
+
+    return null;
 };

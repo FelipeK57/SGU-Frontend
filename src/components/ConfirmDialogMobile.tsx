@@ -15,7 +15,7 @@ interface ConfirmDialogProps {
 
 export const ConfirmDialogMobile = ({ onConfirm, isOpen, onClose }: ConfirmDialogProps) => {
     return (
-        <Modal size="sm" className="m-2" placement="center" isOpen={isOpen} onClose={onClose}>
+        <Modal size="sm" className="m-2" isOpen={isOpen} onClose={onClose}>
             <ModalContent>
                 <ModalHeader className="flex flex-col gap-1">Confirmar eliminación</ModalHeader>
                 <ModalBody>
