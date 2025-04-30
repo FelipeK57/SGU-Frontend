@@ -18,7 +18,7 @@ export const ConfirmDialogExternalSystems = ({ onConfirm }: ConfirmDialogExterna
     return (
         <>
             <Button className="w-full" color="danger" variant="bordered" onPress={onOpen}>Eliminar</Button>
-            <Modal size="sm" className="m-2" placement="center" isOpen={isOpen} onOpenChange={onOpenChange}>
+            <Modal size="sm" className="m-2" placement="auto" isOpen={isOpen} onOpenChange={onOpenChange}>
                 <ModalContent>
                     {(onClose) => (
                         <>
