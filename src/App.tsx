@@ -15,6 +15,8 @@ import { NewUser } from "./pages/NewUser";
 import { EditUser } from "./pages/EditUser";
 import { ChangeAdministrator } from "./pages/ChangeAdministrator";
 import { ExternalSystemsManagement } from "./pages/ExternalSystemsManagement";
+import { ExternalSystemUserManagement } from "./pages/ExternalSystemUserManagement";
+import { ExternalSystemRoles } from "./pages/ExternalSystemRoles";
 
 export const App = () => {
 
@@ -33,13 +35,14 @@ export const App = () => {
       <Route path="/recovery-password" element={<RecoveryPassword />} />
       <Route path="/recovery-password/verify-code" element={<VerifyCode />} />
       <Route path="/recovery-password/new-password" element={<NewPassword />} />
-
       {/* Dashboard */}
       <Route path="/dashboard" element={<Dashboard />}>
         <Route path="users" element={<UsersManagement />} />
         <Route path="new-user" element={<NewUser />} />
         <Route path="edit-user" element={<EditUser />} />
         <Route path="external-systems" element={<ExternalSystemsManagement />} />
+        <Route path="external-systems/:id" element={<ExternalSystemUserManagement />} />
+        <Route path="external-system-roles/:id" element={<ExternalSystemRoles />} />
         <Route path="settings" element={<Settings />}>
           <Route path="my-account" element={<MyAccount />} />
           <Route path="work-areas" element={<WorkAreas />} />

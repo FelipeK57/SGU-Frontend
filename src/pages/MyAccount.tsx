@@ -138,7 +138,7 @@ export const MyAccount = () => {
     if (!userData) return <div className="flex items-center justify-center w-full"><Spinner variant="dots" /></div>
 
     return (
-        <article className="flex flex-col gap-3 w-full xl:w-1/2">
+        <article className="flex flex-col gap-3 w-full md:w-1/2">
             <h1 className="text-lg font-semibold">
                 Información personal
             </h1>
@@ -151,7 +151,7 @@ export const MyAccount = () => {
                         documentTypes.map((documentType) => {
                             return <SelectItem key={documentType.key}>{documentType.label}</SelectItem>
                         })
-                    }
+                    } 
                 </Select>
                 <Input isRequired name="documentNumber" value={documentNumber} onValueChange={setDocumentNumber} label="Número de documento" labelPlacement="outside" placeholder="Ingresa tu número de documento" variant="bordered" />
                 <Select isRequired name="workArea" selectedKeys={[workArea]} onSelectionChange={(keys) => setWorkArea(Array.from(keys)[0] as string)} variant="bordered" label="Área" placeholder="Seleccione un área de trabajo" labelPlacement="outside">
