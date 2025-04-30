@@ -1,5 +1,5 @@
 import { useParams } from "react-router"
-import { useFetchExternalSystemRoles } from "../store/useExternalSystemRole"
+import { ExternalSystemRole, useFetchExternalSystemRoles } from "../store/useExternalSystemRole"
 import { useEffect, useState } from "react"
 import { addToast, Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Form, Input } from "@heroui/react"
 import axios from "axios"
@@ -7,6 +7,8 @@ import { useAuth } from "../store/useAuth"
 import { ThreePoint } from "./WorkAreas"
 import { ConfirmDialog } from "../components/ConfirmDialog"
 import { ConfirmDialogMobile } from "../components/ConfirmDialogMobile"
+
+const DEFAULT_ROLE_NAME = "Sin rol";
 
 export const ExternalSystemRoles = () => {
   const { id } = useParams()
@@ -19,6 +21,7 @@ export const ExternalSystemRoles = () => {
   const [roleName, setRoleName] = useState("")
   const [reload, setReload] = useState(false)
   const [roleId, setRoleId] = useState<number | null>(null)
+  const [rolesFiltered, setRoleFiltered] = useState<ExternalSystemRole[] | null>(null)
 
   const [mobileConfirmDialog, setMobileConfirmDialog] = useState(false);
 
@@ -28,6 +31,12 @@ export const ExternalSystemRoles = () => {
   useEffect(() => {
     fetchExternalSystemRoles(Number(id))
   }, [id, reload])
+
+  useEffect(() => {
+    if (roles.length > 0) {
+      setRoleFiltered(roles.filter(role => role.name !== DEFAULT_ROLE_NAME))
+    }
+  }, [roles])
 
   const editRole = async () => {
     try {
@@ -164,7 +173,7 @@ export const ExternalSystemRoles = () => {
         No hay roles en el sistema externo.
       </p> : <section className="flex flex-col">
         {
-          roles.map((role, index) => {
+          rolesFiltered?.map((role, index) => {
             return <div className={`${index === 0 && "border-t-1"} flex justify-between items-center w-full border-b-1 border-zinc-200 h-14 px-3`} key={role.id}>
               <p>
                 {role.name}
