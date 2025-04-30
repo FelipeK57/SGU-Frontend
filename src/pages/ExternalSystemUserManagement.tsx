@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router"
 import { useAuth } from "../store/useAuth"
 import { User } from "./UsersManagement"
-import { Button, Select, SelectItem, Spinner } from "@heroui/react"
+import { addToast, Button, Select, SelectItem, Spinner } from "@heroui/react"
 import { CardUserExternalSystemRole } from "../components/CardUserExternalSystemRoleProps"
 import { useFetchExternalSystemRoles } from "../store/useExternalSystemRole"
 
@@ -19,6 +19,7 @@ export const ExternalSystemUserManagement = () => {
   const { token } = useAuth()
   const [externalSystemName, setExternalSystemName] = useState("")
   const [externalSystemUsers, setExternalSystemUsers] = useState<ExternalSystemUser[] | null>(null)
+  const [reload, setReload] = useState(false)
 
   const navigate = useNavigate()
 
@@ -26,7 +27,7 @@ export const ExternalSystemUserManagement = () => {
 
   useEffect(() => {
     fetchExternalSystemRoles(Number(externalSystemId.id))
-  }, [externalSystemId])
+  }, [reload, externalSystemId])
 
   useEffect(() => {
     if (!externalSystemId) return
@@ -59,8 +60,32 @@ export const ExternalSystemUserManagement = () => {
     fetchExternalSystemData()
   }, [externalSystemId])
 
-  const updateRole = (key: string) => {
-    console.log(key)
+  const updateRole = async (roleId: number, userId: number) => {
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/external-system-user`,
+        {
+          externalSystemId: externalSystemId.id,
+          userId: userId,
+          roleId: roleId
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      )
+      if (response.status === 200) {
+        setReload(!reload)
+        addToast({
+          title: "Rol de usuario actualizado",
+          description: response.data.message,
+          color: "success",
+          timeout: 5000
+        })
+      }
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   if (!externalSystemUsers) return <div className="flex items-center justify-center w-full"><Spinner variant="dots" /></div>
@@ -114,7 +139,7 @@ export const ExternalSystemUserManagement = () => {
                     {
                       roles.map((role) => (
                         <SelectItem onPress={() => {
-                          updateRole(role.name)
+                          updateRole(role.id, externalSystem.user.id)
                         }} key={role.name}>{role.name}</SelectItem>
                       ))
                     }

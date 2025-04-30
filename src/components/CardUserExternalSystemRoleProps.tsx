@@ -7,7 +7,7 @@ interface CardUserExternalSystemRoleProps {
   role: string | null
   workArea: string
   roles: ExternalSystemRole[]
-  updateRole: (roleName: string) => void
+  updateRole: (roleId: number, userId: number) => void
 }
 
 export const CardUserExternalSystemRole = ({ user, workArea, role, roles, updateRole }: CardUserExternalSystemRoleProps) => {
@@ -21,7 +21,7 @@ export const CardUserExternalSystemRole = ({ user, workArea, role, roles, update
       <Select label="Rol" labelPlacement="outside" placeholder="Selecciona un rol" variant="bordered" defaultSelectedKeys={[role || ""]}>
         {
           roles.map((role) => {
-            return <SelectItem onPress={() => updateRole(role.name)} key={role.name}>
+            return <SelectItem onPress={() => updateRole(role.id, user.id)} key={role.name}>
               {role.name}
             </SelectItem>
           })
