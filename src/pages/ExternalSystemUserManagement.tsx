@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router"
 import { useAuth } from "../store/useAuth"
 import { User } from "./UsersManagement"
 import { addToast, Button, Select, SelectItem, Spinner } from "@heroui/react"
-import { CardUserExternalSystemRole } from "../components/CardUserExternalSystemRoleProps"
+import { CardUserExternalSystemRole } from "../components/CardUserExternalSystemRole"
 import { useFetchExternalSystemRoles } from "../store/useExternalSystemRole"
 
 export interface ExternalSystemUser {
@@ -91,9 +91,14 @@ export const ExternalSystemUserManagement = () => {
   if (!externalSystemUsers) return <div className="flex items-center justify-center w-full"><Spinner variant="dots" /></div>
 
   return <main className="flex flex-col gap-3 w-full xl:max-w-[1280px] 2xl:max-w-[1440px] mx-auto">
-    <h1 className="font-semibold text-lg">
-      Sistemas Externos
-    </h1>
+    <div className="flex flex-row justify-between items-center">
+      <h1 className="font-semibold text-lg">
+        Sistemas Externos
+      </h1>
+      <Button onPress={() => navigate(`/dashboard/external-systems`)} color="primary" variant="light" className="font-light">
+        Atrás
+      </Button>
+    </div>
     <p className="text-sm font-light">Administra los roles de cada usuario dentro del sistema: <strong className="font-semibold">{externalSystemName}</strong></p>
     <Button variant="bordered" onPress={() => navigate(`/dashboard/external-system-roles/${externalSystemId.id}`)} color="primary" className="font-semibold">
       Gestionar roles

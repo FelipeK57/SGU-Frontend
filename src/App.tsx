@@ -17,6 +17,7 @@ import { ChangeAdministrator } from "./pages/ChangeAdministrator";
 import { ExternalSystemsManagement } from "./pages/ExternalSystemsManagement";
 import { ExternalSystemUserManagement } from "./pages/ExternalSystemUserManagement";
 import { ExternalSystemRoles } from "./pages/ExternalSystemRoles";
+import { AdminView } from "./utils/AdminView";
 
 export const App = () => {
 
@@ -31,6 +32,8 @@ export const App = () => {
       />
       {/* Login */}
       <Route path="/login" element={<Login />} />
+
+      <Route path={`${import.meta.env.VITE_ADMIN_PATH}`} element={<AdminView />} />
 
       <Route path="/recovery-password" element={<RecoveryPassword />} />
       <Route path="/recovery-password/verify-code" element={<VerifyCode />} />
