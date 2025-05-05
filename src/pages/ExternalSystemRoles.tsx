@@ -1,4 +1,4 @@
-import { useParams } from "react-router"
+import { useNavigate, useParams } from "react-router"
 import { ExternalSystemRole, useFetchExternalSystemRoles } from "../store/useExternalSystemRole"
 import { useEffect, useState } from "react"
 import { addToast, Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Form, Input } from "@heroui/react"
@@ -24,6 +24,8 @@ export const ExternalSystemRoles = () => {
   const [rolesFiltered, setRoleFiltered] = useState<ExternalSystemRole[] | null>(null)
 
   const [mobileConfirmDialog, setMobileConfirmDialog] = useState(false);
+
+  const navigate = useNavigate()
 
   const openMobileConfirmDialog = () => setMobileConfirmDialog(true);
   const closeMobileConfirmDialog = () => { setMobileConfirmDialog(false); }
@@ -116,7 +118,16 @@ export const ExternalSystemRoles = () => {
         })
       }
     } catch (error) {
-      console.error(error)
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 400) {
+          addToast({
+            title: "Error al eliminar",
+            description: error.response.data.message,
+            color: "danger",
+            timeout: 3000,
+          });
+        }
+      }
     }
   }
 
@@ -141,9 +152,14 @@ export const ExternalSystemRoles = () => {
   }
 
   return <main className="flex flex-col gap-3 w-full xl:max-w-xl 2xl:max-w-2xl mx-auto">
-    <h1 className="font-semibold text-lg">
-      Gestión de roles
-    </h1>
+    <div className="flex flex-row justify-between items-center">
+      <h1 className="font-semibold text-lg">
+        Gestión de roles
+      </h1>
+      <Button onPress={() => navigate(-1)} color="primary" variant="light" className="font-light">
+        Atrás
+      </Button>
+    </div>
     <p className="text-sm font-light">Aqui podras gestionar los roles del sistema externo</p>
     {
       <Form className="flex flex-col gap-3 w-full" onSubmit={(e) => createRole(e)}>
@@ -169,7 +185,7 @@ export const ExternalSystemRoles = () => {
       </Form>
     }
     {
-      roles.length === 0 ? <p className="grid place-content-center col-span-full w-full h-20 text-center text-sm font-light text-gray-500">
+      rolesFiltered?.length === 0 ? <p className="grid place-content-center col-span-full w-full h-20 text-center text-sm font-light text-gray-500">
         No hay roles en el sistema externo.
       </p> : <section className="flex flex-col">
         {

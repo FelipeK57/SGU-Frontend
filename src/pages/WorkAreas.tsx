@@ -77,7 +77,6 @@ export const WorkAreas = () => {
   const deleteWorkArea = async (id: number | null) => {
     try {
       const response = await axios.delete(`${import.meta.env.VITE_API_URL}/api/work-areas/${id}`)
-      console.log(response.data)
       if (response.status === 200) {
         fetchWorkAreas();
         addToast({

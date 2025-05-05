@@ -44,7 +44,7 @@ export const Settings = () => {
                     <Button className="block sm:hidden" color="primary" variant="light" onPress={() => {
                         navigate("/dashboard/settings");
                         setShowLinks(true)
-                    }}>Volver</Button>
+                    }}>Atrás</Button>
                 }
             </nav>
             <section className="sm:grid sm:grid-cols-3 sm:gap-5">
