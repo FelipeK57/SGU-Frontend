@@ -11,14 +11,14 @@ export const AdminView = () => {
 
       console.log("Data:", data)
 
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/users`,
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/create/admin`,
         {
           name: data.name,
           lastName: data.lastName,
           email: data.email,
           documentType: data.documentType,
           documentNumber: data.documentNumber,
-          workArea: data.workArea
+          workAreaName: data.workAreaName
         }
       )
 
@@ -27,6 +27,24 @@ export const AdminView = () => {
       }
     } catch (error) {
       console.error(error)
+    }
+  }
+
+  const createFirstArea = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    try {
+      const data = Object.fromEntries(new FormData(e.currentTarget))
+
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/work-areas`,
+        {
+          name: data.workArea
+        }
+      )
+      if (response.status === 201) {
+        console.log("Response:", response.data)
+      }
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -45,7 +63,7 @@ export const AdminView = () => {
           <Input name="email" variant="bordered" label="Email" labelPlacement="outside" placeholder="Write something" />
           <Input name="documentType" variant="bordered" label="Document type" labelPlacement="outside" placeholder="Write something" />
           <Input name="documentNumber" variant="bordered" label="Document number" labelPlacement="outside" placeholder="Write something" />
-          <Input name="workArea" variant="bordered" label="Work area" labelPlacement="outside" placeholder="Write something" />
+          <Input name="workAreaName" variant="bordered" label="Work area" labelPlacement="outside" placeholder="Write something" />
           <Button type="submit" color="primary" className="w-full font-semibold">
             Crear
           </Button>
@@ -55,6 +73,12 @@ export const AdminView = () => {
         <h2 className="text-lg font-semibold">
           Work area form create
         </h2>
+        <Form onSubmit={(e) => createFirstArea(e)}>
+          <Input name="workArea" variant="bordered" label="Work Area Name" labelPlacement="outside" placeholder="Write something" />
+          <Button type="submit" color="primary" className="w-full font-semibold">
+            Crear
+          </Button>
+        </Form>
       </article>
       <article className="flex flex-col gap-3 items-center">
         <h2 className="text-lg font-semibold">
