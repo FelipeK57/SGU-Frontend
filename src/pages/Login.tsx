@@ -38,8 +38,8 @@ export const Login = () => {
       login(token);
       navigate("/dashboard/users");
       addToast({
-        title: "Inicio de sesión exitoso",
-        description: "Bienvenido a SEMCON",
+        title: "Inicio de sesión exitoso",  
+        description: "Bienvenido al sistema de gestión de usuarios",
         timeout: 3000,
       });
     } catch (error) {
