@@ -1,7 +1,7 @@
 import { addToast, Button, Form, Input } from "@heroui/react"
 import axios from "axios"
 import { useState } from "react"
-import { Link, useNavigate } from "react-router"
+import { useNavigate } from "react-router"
 import { useAuth } from "../store/useAuth"
 
 export const RecoveryPassword = () => {
