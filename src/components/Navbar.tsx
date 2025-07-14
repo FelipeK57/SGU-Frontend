@@ -38,7 +38,7 @@ export const Navbar = () => {
 
     return (
         <header className="hidden xl:flex flex-row justify-between items-center h-16 px-10 border-b border-zinc-200">
-            <img className="w-52 md:w-fit h-4/5" src="/Logo.png" alt="Logo SEMCON" />
+            <img className="w-fit h-4/5" src="/Logo_Semcon_2021.png" alt="Logo SEMCON" />
             <nav className="flex flex-row items-center h-full">
                 {
                     routes.map((route) => {
