@@ -15,7 +15,7 @@ export const Dashboard = () => {
     }, []);
 
     return (
-        <div className="h-screen flex flex-col">
+        <div className="h-svh flex flex-col">
             <Navbar />
             <Menu />
             <div className="flex-1 overflow-y-auto py-3 px-4 w-full">
