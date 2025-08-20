@@ -61,7 +61,7 @@ export const Login = () => {
   };
 
   return (
-    <main className="flex flex-col gap-5 items-center justify-center min-h-screen">
+    <main className="flex flex-col gap-5 items-center justify-center min-h-svh">
       <div className="w-full text-center">
         <h1 className="font-semibold text-xl">Inicio de sesión</h1>
         <h3 className="text-sm font-normal">Sistema de gestión de usuarios</h3>
