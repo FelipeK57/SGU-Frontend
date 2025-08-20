@@ -56,7 +56,7 @@ export const Menu = () => {
     return (
         <>
             <div className="flex items-center justify-between py-2 px-4 h-16 w-full border-b-1 border-b-zinc-200 bg-zinc-50 xl:hidden">
-                <img src="/Logo.png" className="h-full w-52 md:w-fit" alt="Logo de SEMCON" />
+                <img src="/Logo.png" className="h-2/3 w-fit md:w-fit" alt="Logo de SEMCON" />
                 <Button size="lg" color="primary" variant="bordered" onPress={onOpen}>Menú</Button>
             </div>
             <Drawer size="sm" className="rounded-sm" placement="right" isOpen={isOpen} onOpenChange={onOpenChange}>
